@@ -7,13 +7,13 @@
     
     First, how the LEDs are organized on each layer
 
-    0----4----6
+    0----3----6
     |    |    |
     |    |    |
-    1----5----7
+    1----4----7
     |    |    |
     |    |    |
-    2----6----8
+    2----5----8
 
     the layers are stacked vertically, starting at the bottom. 
     So to turn on an led in the top layer, in the upper right corner, column 6 and layer 2 should be used.
