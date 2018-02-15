@@ -1,7 +1,6 @@
 #include <avr/io.h>
 #define MAX_ROLL 20
 #define MAX_DELAY 250
-bool pressed = false;
 byte rolls = 0;
 byte current_delay = 0;
 byte newroll = 0;
@@ -15,13 +14,11 @@ byte states[6]=
     B1011
 };
 void setup(){
-    delay(1000);
     DDRB = B00001111;
     PORTB = B00010000;
 }
 void loop(){
-    pressed = !(PINB & B00010000);
-    if (pressed)
+    if (!(PINB & B00010000))
         rolls = MAX_ROLL;  
     if(rolls){
       if(current_delay++ >= (MAX_DELAY - (rolls*rolls)/2)){
@@ -32,7 +29,5 @@ void loop(){
           PORTB = newroll|16;
       }
     }
-    else if(pressed)
-        current_delay = 0;
     delay(1);
 }
