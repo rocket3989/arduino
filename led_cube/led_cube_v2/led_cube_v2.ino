@@ -1,32 +1,39 @@
 #include "animations.h"
-int layers[3] = {2, 3, 4};
-int columns[9] = {5, 6, 7, 8, 9, 10, 11, 12, 13};
-long portout;
+long shiftRight(long shiftee, int shifter){
+  for (int i = 0; i<shifter;i++){
+    shiftee = shiftee/2;
+  }
+  return shiftee;
+}
+unsigned long portout;
+unsigned long state;
 
 void setup() {
   DDRD = 0xFF;
   PORTD = 0xFF;
 
   DDRB |= 1;
-  PORTB &= 0xFE;
+  PORTB = 0xFF;
   
   DDRC |=  B00000111;
   PORTC |= B00000111;
 
 }
 void loop() {
-  for (unsigned long state : animation) {
+  delay(1000);
+  for (int state_count = 0;state_count<(sizeof(animation)/4);state_count++ ) {
+    state = animation[state_count];
     for (int i = 0; i < 20; i++) {
       for (int layer = 0;layer < 3;layer++){
-        PORTC |= (1<<layer);
+        PORTC |= (1<<2-layer);
         int shift = layer*9 + 5;
-        
-        portout = state << shift;
-        PORTD = portout;
-        delay(400); 
+        PORTD = state >> shift;
+        PORTB = state >> shift + 8;
+        delay(4); 
           
         PORTC &= B11111000;
         PORTD = 0; 
+        PORTB = 0;
       }
         // loop through the layers in the cube
     }

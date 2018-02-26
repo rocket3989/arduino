@@ -207,7 +207,7 @@ void loop() {
     for one pass of the loop. This is a very handy shortcut!
  
  */
-
+delay(1000);
   for (unsigned long state : animation) {
     
     //This first for loop iterates through the states that are stored in the animation file, and holds it in the 'state' variable
@@ -343,7 +343,7 @@ void loop() {
         }
         // At this point, all of the columns have been activated for the current layer  
           
-        delay(4); 
+       // delay(4); 
         // now the program lets the current state of columns and layer stay lit 
         // This could be omitted and the cube would almost be the same, but the program would spend more time, on average,
         // with the lights off and it would look dimmer. The number 4 is again, arbitrary.
