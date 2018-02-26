@@ -1,13 +1,13 @@
 #include <avr/io.h>
-#define DEL_TIME 10;
-#define SEQ_LEN 10;
+#define DEL_TIME 10
+#define SEQ_LEN 10
 byte seq[SEQ_LEN];
 byte len;
 byte prog;
+const byte scale[] PROGMEM = {239,226,213,201,190,179,169,160,151,142,134,127};
 
-
-void note(octave,n){
-    int scaler = 8 - (octave - n/12);
+void note(byte octave,byte n){
+    int scaler = 8 - (octave + n/12);
     if(scaler&B11110000||octave == 0)//scaler out of bounds
         scaler = 0;
     OCR1C = pgm_read_byte(&scale[n%12])-1;
@@ -22,7 +22,7 @@ void setup(){
 }
 void loop(){
     if (len++ == 1){//generate a list
-        for (byte i = 0; i<SEQ_LEN)
+        for (byte i = 0; i<SEQ_LEN;i++)
             seq[i] = random(0,4);
     }
     DDRB = B00011111;
@@ -38,9 +38,10 @@ void loop(){
         if(PINB & B00001111){
             if(PINB == 1 << seq[prog])
                 tone(3,seq[prog++]<<1);//correct note
-            else
+            else{
                 tone(2,9);
                 len = 0;
+            }
             while(PINB & B00001111){}
             delay(10);
         }

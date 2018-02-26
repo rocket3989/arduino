@@ -135,8 +135,8 @@
 */
  
 
-int layers[3] = {2, 3, 4};
-int columns[9] = {5, 6, 7, 8, 9, 10, 11, 12, 13};
+int layers[3] = {14, 15, 16};
+int columns[9] = {0,1,2,3,4,5,6,7,8};
 
 /*  'layers' are the ports connected to the side of the cube. 
     Each port connects to all of the negative side of the leds on each layer.
@@ -220,7 +220,7 @@ void loop() {
       for (int layer : layers) {
         //Time to start drawing the cube! this loop iterates through the layers of the cube, starting at the bottom of the cube
         
-        digitalWrite(layer, LOW);
+        digitalWrite(layer, HIGH);
 
         //Turn the layer low, this makes the layer ready to have leds turn on for it
         //Now, if any of the columns are turned high, the intersection of the two will be powered on
@@ -230,7 +230,7 @@ void loop() {
           //This loop iterates through the led columns 
 
           
-          digitalWrite(column, ((state << (9 * (layer - 2) + column - 5)) & 0x80000000) && 1);
+          digitalWrite(column, ((state << (9 * (layer - 14) + column)) & 0x80000000) && 1);
          
           /*  Uh oh. this looks scary. How are we going to break this down
 
@@ -348,7 +348,7 @@ void loop() {
         // This could be omitted and the cube would almost be the same, but the program would spend more time, on average,
         // with the lights off and it would look dimmer. The number 4 is again, arbitrary.
           
-        digitalWrite(layer, HIGH);
+        digitalWrite(layer, LOW);
         // To prepare for the next layer being controlled, first the current layer must be turned off
           
         for (int column : columns) {

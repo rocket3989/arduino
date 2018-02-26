@@ -1,5 +1,5 @@
 unsigned long animation[] = {
-  
+  /*
   0xAAAAAAAA,
   0x55555555,
   0xFF800000,
@@ -12,7 +12,11 @@ unsigned long animation[] = {
   0xFFFFC000,
   0xFF800000,
   
+  0x964b2580,
+  0x9a4b2680,
+  0x924d2480,
 
+0xa2db68a0
   
   //snake
   
@@ -38,17 +42,17 @@ unsigned long animation[] = {
   0x00003000,
   0x00002000,
   0x00000000
-  
+  */
   
   /*
   0x00000080,
   0x000d8640,
   0xfff27920
-  
+  */
   //0x92248920
   0xf7843de0,
   0xf7840000
-  */
+  
 
   
   
