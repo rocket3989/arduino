@@ -1,10 +1,5 @@
 #include "animations.h"
-long shiftRight(long shiftee, int shifter){
-  for (int i = 0; i<shifter;i++){
-    shiftee = shiftee/2;
-  }
-  return shiftee;
-}
+
 unsigned long portout;
 unsigned long state;
 
