@@ -7,7 +7,7 @@
 #define ANSQROT 1
 #define ANSQPAD 2
 #define NUM_LEDS 6
-#define DATA_PIN 1
+#define DATA_PIN A4
 
 
 
@@ -43,8 +43,6 @@ class Question{
     }
 };
 
-
-
 Question Questions[6] = {
   Question("first",ROTARY),
   Question("second",ROTARY),
@@ -59,7 +57,7 @@ Question Questions[6] = {
 
 LiquidCrystal lcd(13, 12, 11, 10, 9, 8);
 CRGB leds[NUM_LEDS];
-char vals[] = {'r','d', 'u', '3', '6', '9', '#', '2', '5', '8', '0', '1', '4', '7', '*'};
+char vals[] = {'r',0,'d', 'u', '3', '6', '9', '#', '2', '5', '8', '0', '1', '4', '7', '*'};
 
 uint16_t input, mask, prevIn;
 uint8_t state, cursorPos, queSel, currChar, lastChar;
@@ -69,11 +67,13 @@ char charOut;
 void setup() {
   PORTC = 0x1F;
   DDRC = 0;
+  PORTD |= B1100;
   lcd.begin(16, 2);
   lcd.print("Select Question");
   attachInterrupt(1,encoder,RISING);
   FastLED.addLeds<WS2812B, DATA_PIN, GRB>(leds, NUM_LEDS);
-  FastLED.setBrightness(40);
+  FastLED.setBrightness(20);
+  Serial.begin(9600);
 }
 
 void encoder(){
@@ -96,13 +96,13 @@ void loop() {
     delayMicroseconds(3);//give time for the pins to set
     input = (input << 4) | (PINC & 0xF);
   }
-  input = ~input | (PINC >> 4);
-  mask = (prevIn ^ input) & (input);
-
+  input = ~input;
+  mask = ~prevIn & input;
+  Serial.println(input);
   charOut = 0;
   if (mask) {
-    for (byte i = 0; i < 15; i++) {
-      if (mask & (1 << i + 1))
+    for (byte i = 0; i < 16; i++) {
+      if (mask & (1 << i))
         charOut = vals[i];
     }
   }
@@ -125,8 +125,8 @@ void questionSelect(){
   while(Questions[counter].isCorrect())
     counter++;
   */
-  lcd.clear();
-  lcd.print("Select Question");
+  //lcd.clear();
+  //lcd.print("Select Question");
   for(int i; i<6;i++){
     if (Questions[i].isCorrect())
       leds[i] = CRGB::Green;
@@ -141,6 +141,8 @@ void questionSelect(){
       queSel = counter;
       counter = 0;
       state = Questions[queSel].getType();
+      lcd.clear();
+      lcd.print(Questions[queSel].getAns());
     }
   }
   FastLED.show();
@@ -184,7 +186,8 @@ void answerRotary(){
   if(lastChar != currChar && state){
     lcd.clear();
     lcd.print(Questions[queSel].getAns());
-    lcd.write(currChar);
+    
+      lcd.write(currChar);
     lastChar = currChar;
   }
 }
@@ -198,9 +201,12 @@ void answerNumpad(){
         break;
       case '*':
         Questions[queSel].clear();
+        lcd.clear();
         break;
       case '#':
         Questions[queSel].clearLast();
+        lcd.clear();
+        lcd.print(Questions[queSel].getAns());
         break;
       case 'u':
         state = 0;
