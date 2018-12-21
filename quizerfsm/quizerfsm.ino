@@ -62,25 +62,30 @@ char vals[] = {'r',0,'d', 'u', '3', '6', '9', '#', '2', '5', '8', '0', '1', '4',
 uint16_t input, mask, prevIn;
 uint8_t state, cursorPos, queSel, currChar, lastChar;
 volatile int counter;
+volatile int last_trigger = 0;
 char charOut;
 
 void setup() {
   PORTC = 0x1F;
   DDRC = 0;
+  DDRD = 0;
   PORTD |= B1100;
   lcd.begin(16, 2);
   lcd.print("Select Question");
-  attachInterrupt(1,encoder,RISING);
+  attachInterrupt(digitalPinToInterrupt(2),encoder,FALLING);
   FastLED.addLeds<WS2812B, DATA_PIN, GRB>(leds, NUM_LEDS);
   FastLED.setBrightness(20);
-  Serial.begin(9600);
+  //Serial.begin(9600);
 }
 
 void encoder(){
-  if(PIND&1<<2)
-    counter--;
-  else
-    counter++;
+  if(millis()-last_trigger > 10){
+    if(PIND&1<<3)
+      counter++;
+    else
+      counter--;
+  last_trigger = millis();
+  }
 }
 
 void loop() {
@@ -98,7 +103,7 @@ void loop() {
   }
   input = ~input;
   mask = ~prevIn & input;
-  Serial.println(input);
+  //Serial.println(input);
   charOut = 0;
   if (mask) {
     for (byte i = 0; i < 16; i++) {
