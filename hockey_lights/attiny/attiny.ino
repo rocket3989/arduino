@@ -42,4 +42,3 @@ void loop() {
         Serial.write(pass_byte);
     }
 }
-
