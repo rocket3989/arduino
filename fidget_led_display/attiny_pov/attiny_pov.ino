@@ -13,7 +13,7 @@ void displayString(char* input) //borrowed this from you- awesome way to cast a 
   for (int i = 0; i<=strlen(input); i++) //Iterate through the chars in the string
   {  
     for(int j = 0; j<5;j++){ //iterate through the slices of the chars
-      PORTB |= ascii_chars[input[i]-TABLE_START][j] + 224;//okay so I dont know what is on the upper three bits of port b on the attiny,
+      PORTB |= ascii_chars[input[i]-TABLE_START][j] | 224;//okay so I dont know what is on the upper three bits of port b on the attiny,
                                                           //so I am trying not to mess with them. Here I pull the ascii value from the string,
                                                           //adjust it for where the ascii array starts, and pull the correspoding slice from
                                                           //the step the program is on. Then B11100000 is added to the lookup and it is 

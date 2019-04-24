@@ -3,9 +3,16 @@
 #define RX    0
 #define TX    1
 #define DELAY 500
-byte pass_byte;
 int average = 0;
 SoftwareSerial Serial(RX, TX);
+
+void passThrough(){
+    if (Serial.available()) {
+        byte pass_byte = Serial.read() + 1;
+        Serial.write(pass_byte);
+    }
+}
+
 void setup() {
     Serial.begin(9600);
     pinMode(A3, INPUT);
@@ -24,21 +31,14 @@ void setup() {
 void loop() {
 
     delay(10);
-    if (abs(analogRead(A3) - average) > 10) {
-        delay(5);
-        if (abs(analogRead(A3) - average) > 10) {
+    int check = 0;
+    while(abs(analogRead(A3) - average) > 10) {
+        if(check++ == 1)
             Serial.write(0x30);
-            while (abs(analogRead(A3) - average) > 10) {
-                if (Serial.available()) {
-                    pass_byte = Serial.read() + 1;
-                    Serial.write(pass_byte);
-                }
-                delay(20);
-            }
-        }
+    
+        passThrough();
+        delay(20);
     }
-    if (Serial.available()) {
-        pass_byte = Serial.read() + 1;
-        Serial.write(pass_byte);
-    }
+    
+    passThrough();
 }
