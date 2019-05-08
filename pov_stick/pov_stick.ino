@@ -76,7 +76,7 @@ byte disp[7] = {
   registerWrite(0);
   delay(3);
 */
-  displayString("WOW");
+  displayString("wow");
 
 
 }

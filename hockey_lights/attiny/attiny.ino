@@ -2,8 +2,8 @@
 #include <SoftwareSerial.h>
 #define RX    0
 #define TX    1
-#define DELAY 500
-int average = 0;
+#define DELAY 500 
+int average = 0;                     
 SoftwareSerial Serial(RX, TX);
 
 void passThrough(){
@@ -32,7 +32,7 @@ void loop() {
 
     delay(10);
     int check = 0;
-    while(abs(analogRead(A3) - average) > 10) {
+    while(abs(analogRead(A3) - average) > 20) {
         if(check++ == 1)
             Serial.write(0x30);
     
