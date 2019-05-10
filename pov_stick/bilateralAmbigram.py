@@ -1,4 +1,3 @@
-from unidecode import unidecode
 pairs = set((('a','a'), ('b','d'), ('d','b'), ('e','g'), ('g','e'), ('h','h'), ('l','l'), ('m','m'), ('o','o'), ('p','q'), ('q','p'), ('t','t'), ('u','u'), ('v','v'), ('w','w'), ('x','x'), ('s','z'), ('z','s'), ('y','y')))
 output = set()
 with open('words.txt','r') as file:
