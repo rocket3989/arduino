@@ -1,8 +1,8 @@
-
 #include <SoftwareSerial.h>
-#define RX    0
-#define TX    1
-#define DELAY 500 
+
+#define RX    1
+#define TX    0
+
 int average = 0;                     
 SoftwareSerial Serial(RX, TX);
 
@@ -24,8 +24,8 @@ void setup() {
         delay(5);
     }
     average = sum >> 7;
-    Serial.print("ave: ");
-    Serial.println(average);
+    //Serial.print("ave: ");
+    //Serial.println(average);
 }
 
 void loop() {
